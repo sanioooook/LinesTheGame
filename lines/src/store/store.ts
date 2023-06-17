@@ -1,4 +1,4 @@
-import {configureStore} from "@reduxjs/toolkit";
+import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import rootReducer from "./slices/root.reducer";
 import {InitialState, initialState as initialStateFromStore} from './slices/gameBoard.slice'
 import CryptoJS from "crypto-js";
@@ -9,8 +9,8 @@ const loadFromLocalStorage = (): InitialState => {
     if (serializedState) {
         const bytes = CryptoJS.AES.decrypt(serializedState, secretKey);
         const originalState = bytes.toString(CryptoJS.enc.Utf8);
-        const parsedState: {gameState: InitialState} = JSON.parse(originalState);
-        return parsedState.gameState;
+        const parsedState: {gameBoard: InitialState} = JSON.parse(originalState);
+        return parsedState.gameBoard;
     } else {
         return initialStateFromStore
     }
@@ -32,7 +32,7 @@ const store = configureStore({
     preloadedState: {
         gameBoard: initialState
     },
-    middleware: [saveToLocalStorage]
+    middleware: getDefaultMiddleware().concat(saveToLocalStorage)
 });
 
 export default store;

@@ -34,7 +34,8 @@ $start-z-index: 0;
     }
 
     @each $color in (red, blue, green, yellow, purple, pink, orange) {
-      .ball-#{$color} {
+      $color-name: "" + $color;
+      .ball-#{$color-name} {
         background-color: $color;
       }
     }

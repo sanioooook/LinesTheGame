@@ -19,7 +19,9 @@ export const App: React.FC = () => {
     const scores = useAppSelector((state) => state.gameBoard.score)
     const dispatch = useAppDispatch();
     useEffect(() => {
-        dispatch(startGame());
+        if(board.flat().filter(x => x.ball).length === 0) {
+            dispatch(startGame());
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
