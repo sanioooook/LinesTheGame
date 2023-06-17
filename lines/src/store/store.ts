@@ -1,11 +1,15 @@
 import {configureStore} from "@reduxjs/toolkit";
 import rootReducer from "./slices/root.reducer";
 import {InitialState, initialState as initialStateFromStore} from './slices/gameBoard.slice'
+import CryptoJS from "crypto-js";
+const secretKey = process.env.REACT_APP_SECRET_KEY ?? 'secret';
 
 const loadFromLocalStorage = (): InitialState => {
     const serializedState = localStorage.getItem('gameState');
     if (serializedState) {
-        const parsedState: {gameState: InitialState} = JSON.parse(serializedState);
+        const bytes = CryptoJS.AES.decrypt(serializedState, secretKey);
+        const originalState = bytes.toString(CryptoJS.enc.Utf8);
+        const parsedState: {gameState: InitialState} = JSON.parse(originalState);
         return parsedState.gameState;
     } else {
         return initialStateFromStore
@@ -16,7 +20,9 @@ const initialState = loadFromLocalStorage();
 
 const saveToLocalStorage = (store: { getState: () => any; }) => (next: (arg0: any) => any) => (action: any) => {
     const result = next(action);
-    localStorage.setItem('gameState', JSON.stringify(store.getState()));
+    const serializedState = JSON.stringify(store.getState());
+    const encryptedState = CryptoJS.AES.encrypt(serializedState, secretKey).toString();
+    localStorage.setItem('gameState', encryptedState);
     return result;
 };
 

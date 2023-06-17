@@ -20,6 +20,7 @@ export const App: React.FC = () => {
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(startGame());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSelectBall = (field: Field) => {
@@ -47,7 +48,7 @@ export const App: React.FC = () => {
                     onSelectBall={handleSelectBall}
                     onClickForMoveBall={handleMoveBall}/>
             </div>
-            <button onClick={handleClickRestart}><img src={svgRestart}/>Restart game</button>
+            <button onClick={handleClickRestart}><img src={svgRestart} alt={''}/>Restart game</button>
         </>
     );
 }

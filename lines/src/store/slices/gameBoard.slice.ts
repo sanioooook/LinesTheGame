@@ -3,14 +3,13 @@ import {GameBoard} from "../../types/gameBoard.type";
 import {
     changeBoard,
     changeSelectedBall,
-    checkLines, incrementScore,
+    incrementScore,
     moveBall, placeBallsAndGenerateNextBalls,
     restartGame,
     startGame
 } from "../actions/gameBoard.actions";
 import {Field} from "../../types/field.type";
 import {Ball} from "../../interfaces/IBall";
-import {checkLinesHelper} from "../../helpers/BFSAlgorithm.helper";
 import {generateNewBalls, placeNewBallsOnBoards} from "../../helpers/generate.helper";
 
 export type InitialState = {
