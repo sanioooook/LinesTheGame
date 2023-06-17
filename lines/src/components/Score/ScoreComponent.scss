@@ -1,0 +1,9 @@
+.scores {
+  display: flex;
+  flex-direction: column;
+
+  span {
+    color: red;
+    font-size: 1.5rem;
+  }
+}

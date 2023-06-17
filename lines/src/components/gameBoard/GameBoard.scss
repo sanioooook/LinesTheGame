@@ -1,0 +1,55 @@
+@use "sass:math";
+
+$field-width: 80px;
+$filed-height: 80px;
+$start-z-index: 0;
+
+.game-board {
+  //width: $field-width * 9;
+  //height: $filed-height * 9;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  z-index: $start-z-index;
+
+  .field {
+    width: $field-width;
+    height: $filed-height;
+    background-color: aliceblue;
+    border: 1px black solid;
+    z-index: $start-z-index + 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .ball {
+      width: $field-width - 4px;
+      height: $filed-height - 4px;
+      border-radius: math.div($field-width, 2);
+      z-index: $start-z-index + 2;
+    }
+
+    .ball-selected {
+      animation-name: blink; animation-duration: 1.5s; animation-iteration-count: infinite;
+    }
+
+    @each $color in (red, blue, green, yellow, purple, pink, orange) {
+      .ball-#{$color} {
+        background-color: $color;
+      }
+    }
+
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
