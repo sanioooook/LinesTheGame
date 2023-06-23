@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.scss';
 import {GameBoardComponent} from './components/gameBoard/GameBoard'
 import {Field} from "./types/field.type";
@@ -18,6 +18,7 @@ import svgRestart from './svg/autorenew_white_24dp.svg';
 import LanguageSelect from "./components/LanguageSelect/LanguageSelect";
 import {LanguagesEnum} from "./types/languages.enum";
 import {RulesComponent} from "./components/Rules/RulesComponent";
+import Modal from "./components/Modal/Modal";
 
 export const App: React.FC = () => {
     const { t } = useTranslation();
@@ -26,6 +27,15 @@ export const App: React.FC = () => {
     const scores = useAppSelector((state) => state.gameBoard.score)
     const language = useAppSelector(state => state.gameBoard.selectedLanguage);
     const dispatch = useAppDispatch();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
     useEffect(() => {
         if(board.flat().filter(x => x.ball).length === 0) {
             dispatch(startGame());
@@ -59,18 +69,23 @@ export const App: React.FC = () => {
                 <div className={`score-component`}>
                     <ScoreComponent score={scores}/>
                 </div>
-                <LanguageSelect
-                    languages={[
-                        {value: LanguagesEnum.en, label: 'English'},
-                        {value: LanguagesEnum.ru, label: 'Russian'},
-                        {value: LanguagesEnum.ua, label: 'Ukrainian'}
-                    ]}
-                    selectedLanguage={language}
-                    onLanguageChange={handleLanguageChange}
-                />
-                <button className={'button'} onClick={handleClickRestart}>
-                    <img className={'icon'} src={svgRestart} alt={''}/>{t("restart")}
-                </button>
+                <div className={`buttons-and-selector`}>
+                    <LanguageSelect
+                        languages={[
+                            {value: LanguagesEnum.en, label: 'English'},
+                            {value: LanguagesEnum.ru, label: 'Russian'},
+                            {value: LanguagesEnum.ua, label: 'Ukrainian'}
+                        ]}
+                        selectedLanguage={language}
+                        onLanguageChange={handleLanguageChange}
+                    />
+
+                    <button className={`button`} onClick={handleOpenModal}>{t("openRules")}</button>
+                    <Modal isOpen={isModalOpen} onClose={handleCloseModal}/>
+                    <button className={'button'} onClick={handleClickRestart}>
+                        <img className={'icon'} src={svgRestart} alt={''}/>{t("restart")}
+                    </button>
+                </div>
             </div>
             <div className={`centered-game-board`}>
                 <BoardWithNextBallsComponent
@@ -80,7 +95,7 @@ export const App: React.FC = () => {
                     onSelectBall={handleSelectBall}
                     onClickForMoveBall={handleMoveBall}/>
             </div>
-            <RulesComponent/>
+            <div/>
         </div>
     );
 }
