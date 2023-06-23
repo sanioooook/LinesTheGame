@@ -164,21 +164,15 @@ body {
   }
 
   button {
-    height: 50px;
-/*    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #b90a56;
-    color: white;*/
-    position: fixed;
+    position: relative;
     bottom: 50px;
     left: 50px;
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1250px) {
   body {
-    width: 1200px;
+    width: 1250px;
 
     .game-board {
       margin-bottom: 1rem;
