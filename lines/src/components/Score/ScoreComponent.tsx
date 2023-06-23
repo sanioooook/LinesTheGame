@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export interface ScoreComponentProps {
     score: {
@@ -9,9 +10,10 @@ export interface ScoreComponentProps {
 }
 
 export const ScoreComponent: React.FC<ScoreComponentProps> = ({score}) => {
+    const { t } = useTranslation();
     return  <div className={`scores`}>
-        <span>Current score {score.currentScore}</span>
-        <span>Last score {score.latestScore}</span>
-        <span>Best score {score.bestScore}</span>
+        <span>{t("currentScore")} {score.currentScore}</span>
+        <span>{t("lastScore")} {score.latestScore}</span>
+        <span>{t("bestScore")} {score.bestScore}</span>
     </div>
 }

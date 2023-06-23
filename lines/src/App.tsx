@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import './App.scss';
-import {GameBoardComponent} from './components/gameBoard/GameBoard'
+import {GameBoardComponent} from './components/GameBoard/GameBoard'
 import {Field} from "./types/field.type";
 import {
+    changeLanguage,
     changeSelectedBall,
     moveBallAndCheckLines, restartGame,
     startGame
@@ -11,12 +12,18 @@ import {GameBoard} from "./types/gameBoard.type";
 import {useAppDispatch, useAppSelector} from "./store/hooks";
 import {BoardWithNextBallsComponent} from "./components/BoardWithNextBalls/BoardWithNextBallsComponent";
 import {ScoreComponent} from "./components/Score/ScoreComponent";
+import "./i18n";
+import {useTranslation} from "react-i18next";
 import svgRestart from './svg/autorenew_white_24dp.svg';
+import LanguageSelect from "./components/LanguageSelect/LanguageSelect";
+import {LanguagesEnum} from "./types/languages.enum";
 
 export const App: React.FC = () => {
+    const { t } = useTranslation();
     const board: GameBoard = useAppSelector((state) => state.gameBoard.board)
     const boardWithNextBalls = useAppSelector((state) => state.gameBoard.boardWithNextBalls)
     const scores = useAppSelector((state) => state.gameBoard.score)
+    const language = useAppSelector(state => state.gameBoard.selectedLanguage);
     const dispatch = useAppDispatch();
     useEffect(() => {
         if(board.flat().filter(x => x.ball).length === 0) {
@@ -24,6 +31,13 @@ export const App: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    useEffect(() => {
+        dispatch(changeLanguage(language));
+    }, []);
+
+    const handleLanguageChange = (newLanguage: LanguagesEnum) => {
+        dispatch(changeLanguage(newLanguage));
+    };
 
     const handleSelectBall = (field: Field) => {
         dispatch(changeSelectedBall(field));
@@ -38,9 +52,23 @@ export const App: React.FC = () => {
         dispatch(restartGame());
     }
     return (
-        <>
-            <div className={`score-component`}>
-                <ScoreComponent score={scores}/>
+        <div className={`main`}>
+            <div className={`navigations`}>
+                <div className={`score-component`}>
+                    <ScoreComponent score={scores}/>
+                </div>
+                <LanguageSelect
+                    languages={[
+                        {value: LanguagesEnum.en, label: 'English'},
+                        {value: LanguagesEnum.ru, label: 'Russian'},
+                        {value: LanguagesEnum.ua, label: 'Ukrainian'}
+                    ]}
+                    selectedLanguage={language}
+                    onLanguageChange={handleLanguageChange}
+                />
+                <button className={'button'} onClick={handleClickRestart}>
+                    <img className={'icon'} src={svgRestart} alt={''}/>{t("restart")}
+                </button>
             </div>
             <div className={`centered-game-board`}>
                 <BoardWithNextBallsComponent
@@ -50,7 +78,7 @@ export const App: React.FC = () => {
                     onSelectBall={handleSelectBall}
                     onClickForMoveBall={handleMoveBall}/>
             </div>
-            <button className={'button'} onClick={handleClickRestart}><img className={'icon'} src={svgRestart} alt={''}/>Restart game</button>
-        </>
+            <div/>
+        </div>
     );
 }

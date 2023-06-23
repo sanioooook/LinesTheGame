@@ -1,16 +1,19 @@
 import {createSlice, Slice} from '@reduxjs/toolkit'
 import {GameBoard} from "../../types/gameBoard.type";
 import {
-    changeBoard,
+    changeBoard, changeLanguage,
     changeSelectedBall,
     incrementScore,
-    moveBall, placeBallsAndGenerateNextBalls,
+    moveBall,
+    placeBallsAndGenerateNextBalls,
     restartGame,
     startGame
 } from "../actions/gameBoard.actions";
 import {Field} from "../../types/field.type";
 import {Ball} from "../../interfaces/IBall";
 import {generateNewBalls, placeNewBallsOnBoards} from "../../helpers/generate.helper";
+import {LanguagesEnum} from "../../types/languages.enum";
+import {getI18n} from "react-i18next";
 
 export type InitialState = {
     board: GameBoard;
@@ -21,6 +24,7 @@ export type InitialState = {
         latestScore: number,
     }
     boardWithNextBalls: Ball[],
+    selectedLanguage: LanguagesEnum,
 }
 
 export const initialState: InitialState = {
@@ -36,6 +40,7 @@ export const initialState: InitialState = {
     boardWithNextBalls: Array.from({length: 3}, () => {
         return undefined
     }),
+    selectedLanguage: LanguagesEnum.en,
 }
 
 
@@ -109,6 +114,12 @@ export const gameBoardSlice: Slice<InitialState, {}, 'gameBoard'> = createSlice(
             })
             .addCase(incrementScore, (state, action) => {
                 state.score.currentScore += action.payload;
+            })
+            .addCase(changeLanguage, (state, action) => {
+                state.selectedLanguage = action.payload;
+                const i18n = getI18n();
+                const language = LanguagesEnum[action.payload];
+                i18n.changeLanguage(language).then();
             })
     }
 })

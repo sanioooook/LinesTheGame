@@ -51,128 +51,139 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: beige;
 
-  .game-board {
-    //width: $field-width * 9;
-    //height: $filed-height * 9;
+  .main {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(9, 1fr);
-    z-index: $start-z-index;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
 
-    .field {
-      @include field;
-
-      .ball-selected {
-        animation-name: blink;
-        animation-duration: 1.5s;
-        animation-iteration-count: infinite;
-      }
-    }
-  }
-
-  .board-with-next-balls {
-    display: flex;
-    flex-direction: row;
-    z-index: $start-z-index;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-
-    .field {
-      @include field;
-    }
-  }
-
-  @keyframes blink {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: .3;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  .centered-game-board {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .score-component {
-    position: fixed;
-    top: 50px;
-    left: 50px;
-
-    .scores {
+    .navigations {
+      padding-left: 1rem;
+      padding-bottom: 1rem;
+      padding-top: 1rem;
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
 
-      span {
-        color: red;
-        font-size: 1.5rem;
+      .score-component {
+/*        position: fixed;
+        top: 50px;
+        left: 50px;*/
+
+        .scores {
+          display: flex;
+          flex-direction: column;
+
+          span {
+            color: red;
+            font-size: 1.5rem;
+          }
+        }
+      }
+
+      $raspberry: #C2185B; // Raspberry color from Material Design palette
+      $white: #FFFFFF; // White color
+
+      .button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $raspberry;
+        color: $white;
+        padding: 12px 24px;
+        font-size: 14px;
+        border: none;
+        border-radius: 28px; // Makes the button rounded
+        text-transform: uppercase; // Material Design buttons typically have uppercase text
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        .icon {
+          margin-right: 8px;
+          transition: transform 0.3s ease;
+        }
+
+        &:hover {
+          background-color: darken($raspberry, 10%); // Darkens the background color a bit when hovering
+
+          // Rotate the icon when hovering over the button
+          .icon {
+            transform: rotate(360deg);
+          }
+        }
+
+        &:active {
+          background-color: darken($raspberry, 20%); // Darkens the background color a bit more when active (clicked)
+        }
+
+        &:focus {
+          outline: none; // Removes the default focus outline
+          box-shadow: 0 0 0 3px rgba($raspberry, 0.3); // Adds a custom focus outline using a box shadow
+        }
+
+        &:disabled {
+          background-color: lighten($raspberry, 40%); // Lightens the background color when the button is disabled
+          cursor: not-allowed;
+        }
       }
     }
-  }
 
-  $raspberry: #C2185B; // Raspberry color from Material Design palette
-  $white: #FFFFFF; // White color
-
-  .button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background-color: $raspberry;
-    color: $white;
-    padding: 12px 24px;
-    font-size: 14px;
-    border: none;
-    border-radius: 28px; // Makes the button rounded
-    text-transform: uppercase; // Material Design buttons typically have uppercase text
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    .icon {
-      margin-right: 8px;
-      transition: transform 0.3s ease;
-    }
-
-    &:hover {
-      background-color: darken($raspberry, 10%); // Darkens the background color a bit when hovering
-
-      // Rotate the icon when hovering over the button
-      .icon {
-        transform: rotate(360deg);
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: .3;
+      }
+      100% {
+        opacity: 1;
       }
     }
 
-    &:active {
-      background-color: darken($raspberry, 20%); // Darkens the background color a bit more when active (clicked)
-    }
+    .centered-game-board {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
 
-    &:focus {
-      outline: none; // Removes the default focus outline
-      box-shadow: 0 0 0 3px rgba($raspberry, 0.3); // Adds a custom focus outline using a box shadow
-    }
+      .game-board {
+        //width: $field-width * 9;
+        //height: $filed-height * 9;
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        grid-template-rows: repeat(9, 1fr);
+        z-index: $start-z-index;
 
-    &:disabled {
-      background-color: lighten($raspberry, 40%); // Lightens the background color when the button is disabled
-      cursor: not-allowed;
-    }
-  }
+        .field {
+          @include field;
 
-  button {
-    position: relative;
-    bottom: 50px;
-    left: 50px;
+          .ball-selected {
+            animation-name: blink;
+            animation-duration: 1.5s;
+            animation-iteration-count: infinite;
+          }
+        }
+      }
+
+      .board-with-next-balls {
+        display: flex;
+        flex-direction: row;
+        z-index: $start-z-index;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+
+        .field {
+          @include field;
+        }
+      }
+    }
   }
 }
 
 @media (max-width: 1250px) {
   body {
     width: 1250px;
+    height: 900px;
 
     .game-board {
       margin-bottom: 1rem;

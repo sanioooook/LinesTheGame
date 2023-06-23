@@ -1,0 +1,10 @@
+{
+  "restart": "Restart game",
+  "currentScore": "Current score",
+  "lastScore": "Last score",
+  "bestScore": "Best score",
+  "selectLanguage": "Select language",
+  "Ukrainian": "Ukrainian",
+  "Russian": "Russian",
+  "English": "English"
+}

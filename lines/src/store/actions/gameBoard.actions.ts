@@ -3,6 +3,7 @@ import {Field} from "../../types/field.type";
 import {RootState} from "../store";
 import {isPathBetween} from "../../helpers/BFSAlgorithm.helper";
 import {GameBoard} from "../../types/gameBoard.type";
+import {LanguagesEnum} from "../../types/languages.enum";
 
 const baseType = 'GAME_BOARD/'
 
@@ -14,6 +15,7 @@ export const restartGame = createAction(`${baseType}RESTART_GAME`);
 export const placeBallsAndGenerateNextBalls = createAction(`${baseType}PLACE_BALLS_AND_GENERATE_NEXT_BALLS`);
 export const incrementScore = createAction<number>(`${baseType}INCREMENT_SCORE`)
 export const moveBallAndCheckLinesType = `${baseType}MOVE_BALL_AND_CHECK_LINES`;
+export const changeLanguage = createAction<LanguagesEnum>(`${baseType}CHANGE_LANGUAGE`);
 
 export const moveBallAndCheckLines = createAsyncThunk<void, Field, { state: RootState }>(
     moveBallAndCheckLinesType,

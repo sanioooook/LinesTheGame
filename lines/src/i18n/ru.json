@@ -1,0 +1,10 @@
+{
+  "restart": "Перезапустить игру",
+  "currentScore": "Текущий счёт",
+  "lastScore": "Последний счёт",
+  "bestScore": "Лучший счёт",
+  "selectLanguage": "Выберите язык",
+  "Ukrainian": "Украинский",
+  "Russian": "Русский",
+  "English": "Английский"
+}
