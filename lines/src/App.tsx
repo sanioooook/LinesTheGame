@@ -17,7 +17,6 @@ import {useTranslation} from "react-i18next";
 import svgRestart from './svg/autorenew_white_24dp.svg';
 import LanguageSelect from "./components/LanguageSelect/LanguageSelect";
 import {LanguagesEnum} from "./types/languages.enum";
-import {RulesComponent} from "./components/Rules/RulesComponent";
 import Modal from "./components/Modal/Modal";
 
 export const App: React.FC = () => {
