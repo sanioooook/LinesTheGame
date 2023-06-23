@@ -1,6 +1,5 @@
 import {GameBoard} from "../../types/gameBoard.type";
 import React from "react";
-import './GameBoard.scss'
 import {Field} from "../../types/field.type";
 import {FieldComponent} from "../Field/FieldComponent";
 

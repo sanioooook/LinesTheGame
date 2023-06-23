@@ -1,5 +1,4 @@
 import React from "react";
-import './ScoreComponent.scss';
 
 export interface ScoreComponentProps {
     score: {

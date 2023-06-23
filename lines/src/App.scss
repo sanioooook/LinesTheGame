@@ -1,35 +1,187 @@
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+@use "sass:math";
+
+$field-width: 80px;
+$filed-height: 80px;
+$start-z-index: 0;
+$colors: [
+        ("name": "red", "color": rgba(255, 0, 0, 1)),
+        ("name": "blue", "color": rgba(0, 0, 255, 1)),
+        ("name": "green", "color": rgba(0,132,0, 1)),
+        ("name": "yellow", "color": rgb(222,222,22)),
+        ("name": "purple", "color": rgba(128, 0, 128, 1)),
+        ("name": "pink", "color": rgb(236,96,130)),
+        ("name": "orange", "color": rgba(255, 165, 0, 1))
+];
+
+@mixin field {
+  width: $field-width;
+  height: $filed-height;
+  background-color: aliceblue;
+  border: 1px black solid;
+  z-index: $start-z-index + 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  @include ball;
 }
 
-.centered-game-board {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+@mixin ball {
+  .ball {
+    width: $field-width - 4px;
+    height: $filed-height - 4px;
+    border-radius: math.div($field-width, 2);
+    z-index: $start-z-index + 2;
+  }
+
+  @each $color-map in $colors {
+    $name-color: map-get($color-map, "name");
+    $color: map-get($color-map, "color");
+    .ball-#{$name-color} {
+      background-color: $color;
+    }
+  }
 }
 
-.score-component {
-  position: fixed;
-  top: 50px;
-  left: 50px;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: beige;
+
+  .game-board {
+    //width: $field-width * 9;
+    //height: $filed-height * 9;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    z-index: $start-z-index;
+
+    .field {
+      @include field;
+
+      .ball-selected {
+        animation-name: blink;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+      }
+    }
+  }
+
+  .board-with-next-balls {
+    display: flex;
+    flex-direction: row;
+    z-index: $start-z-index;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+
+    .field {
+      @include field;
+    }
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .3;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .centered-game-board {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .score-component {
+    position: fixed;
+    top: 50px;
+    left: 50px;
+
+    .scores {
+      display: flex;
+      flex-direction: column;
+
+      span {
+        color: red;
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  $raspberry: #C2185B; // Raspberry color from Material Design palette
+  $white: #FFFFFF; // White color
+
+  .button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $raspberry;
+    color: $white;
+    padding: 12px 24px;
+    font-size: 14px;
+    border: none;
+    border-radius: 28px; // Makes the button rounded
+    text-transform: uppercase; // Material Design buttons typically have uppercase text
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    .icon {
+      margin-right: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background-color: darken($raspberry, 10%); // Darkens the background color a bit when hovering
+
+      // Rotate the icon when hovering over the button
+      .icon {
+        transform: rotate(360deg);
+      }
+    }
+
+    &:active {
+      background-color: darken($raspberry, 20%); // Darkens the background color a bit more when active (clicked)
+    }
+
+    &:focus {
+      outline: none; // Removes the default focus outline
+      box-shadow: 0 0 0 3px rgba($raspberry, 0.3); // Adds a custom focus outline using a box shadow
+    }
+
+    &:disabled {
+      background-color: lighten($raspberry, 40%); // Lightens the background color when the button is disabled
+      cursor: not-allowed;
+    }
+  }
+
+  button {
+    height: 50px;
+/*    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #b90a56;
+    color: white;*/
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+  }
 }
 
-button {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #b90a56;
-  color: white;
-  position: fixed;
-  bottom: 50px;
-  left: 50px;
+@media (max-width: 1200px) {
+  body {
+    width: 1200px;
+
+    .game-board {
+      margin-bottom: 1rem;
+    }
+  }
 }

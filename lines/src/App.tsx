@@ -11,7 +11,7 @@ import {GameBoard} from "./types/gameBoard.type";
 import {useAppDispatch, useAppSelector} from "./store/hooks";
 import {BoardWithNextBallsComponent} from "./components/BoardWithNextBalls/BoardWithNextBallsComponent";
 import {ScoreComponent} from "./components/Score/ScoreComponent";
-import svgRestart from './svg/restart_alt_black_24dp.svg';
+import svgRestart from './svg/autorenew_white_24dp.svg';
 
 export const App: React.FC = () => {
     const board: GameBoard = useAppSelector((state) => state.gameBoard.board)
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
                     onSelectBall={handleSelectBall}
                     onClickForMoveBall={handleMoveBall}/>
             </div>
-            <button onClick={handleClickRestart}><img src={svgRestart} alt={''}/>Restart game</button>
+            <button className={'button'} onClick={handleClickRestart}><img className={'icon'} src={svgRestart} alt={''}/>Restart game</button>
         </>
     );
 }

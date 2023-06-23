@@ -1,7 +1,6 @@
 import React from "react";
 import {FieldComponent} from "../Field/FieldComponent";
 import {Ball} from "../../interfaces/IBall";
-import './BoardWithNextBallsComponent.scss'
 
 export type BoardWithNextBallsProps = {
     boardWithNextBalls: Ball[],
