@@ -6,7 +6,7 @@ import {Field} from "../types/field.type";
 export function placeNewBallsOnBoards(board: GameBoard, balls: Ball[]): Field[] {
     const freeFields: Field[] = [...board.flat().filter((field) => !field.ball)];
     const fields: Field[] = [];
-    for (let i = 0; i < (freeFields.length < 3 ? freeFields.length : balls.length); i++) {
+    for (let i = 0; i < (freeFields.length <= 3 ? freeFields.length + 1 : balls.length); i++) {
         const field = freeFields[Math.floor(Math.random() * freeFields.length)];
         fields.push({...field, ball: balls[i] });
         const index = freeFields.findIndex(x => x.j === field.j && x.i === field.i);
