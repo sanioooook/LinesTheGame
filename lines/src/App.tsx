@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import './App.scss';
-import {GameBoardComponent} from './components/GameBoard/GameBoard'
+import {GameBoardComponent} from './components/gameBoard/GameBoard'
 import {Field} from "./types/field.type";
 import {
     changeLanguage,
@@ -17,6 +17,7 @@ import {useTranslation} from "react-i18next";
 import svgRestart from './svg/autorenew_white_24dp.svg';
 import LanguageSelect from "./components/LanguageSelect/LanguageSelect";
 import {LanguagesEnum} from "./types/languages.enum";
+import {RulesComponent} from "./components/Rules/RulesComponent";
 
 export const App: React.FC = () => {
     const { t } = useTranslation();
@@ -33,6 +34,7 @@ export const App: React.FC = () => {
     }, []);
     useEffect(() => {
         dispatch(changeLanguage(language));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleLanguageChange = (newLanguage: LanguagesEnum) => {
@@ -78,7 +80,7 @@ export const App: React.FC = () => {
                     onSelectBall={handleSelectBall}
                     onClickForMoveBall={handleMoveBall}/>
             </div>
-            <div/>
+            <RulesComponent/>
         </div>
     );
 }
