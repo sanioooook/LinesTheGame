@@ -9,11 +9,10 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+    const { t } = useTranslation();
     if (!isOpen) {
         return null;
     }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { t } = useTranslation();
 
     return (
         <div className="modal-overlay">
@@ -26,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                     <RulesComponent/>
                 </div>
                 <div className="modal-footer">
-                    <button className="close-button" onClick={onClose}>Close</button>
+                    <button className="close-button" onClick={onClose}>{t('Close')}</button>
                 </div>
             </div>
         </div>

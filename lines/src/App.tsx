@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.scss';
-import {GameBoardComponent} from './components/gameBoard/GameBoard'
+import {GameBoardComponent} from './components/GameBoard/GameBoard'
 import {Field} from "./types/field.type";
 import {
     changeLanguage,

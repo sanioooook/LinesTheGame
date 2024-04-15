@@ -26,34 +26,38 @@
   max-width: 500px;
   width: 90%;
   z-index: 4;
-}
 
-.modal-header {
-  padding: 10px 20px;
-  background: #f2f2f2;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  .modal-header {
+    padding: 10px 20px;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.modal-title {
-  margin: 0;
-  font-size: 18px;
-}
+  .modal-title {
+    margin: 0;
+    font-size: 18px;
+  }
 
-.close-button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
+  .modal-body {
+    padding: 0 20px 20px 10px;
 
-.modal-body {
-  padding: 20px;
-}
+    h1 {
+      margin: 10px auto;
+    }
+  }
 
-.modal-footer {
-  padding: 10px 20px;
-  background: #f2f2f2;
-  text-align: right;
+  .modal-footer {
+    padding: 10px 20px;
+    background: #f2f2f2;
+    text-align: right;
+  }
+
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
 }

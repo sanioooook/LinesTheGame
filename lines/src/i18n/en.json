@@ -17,5 +17,6 @@
   "rule6": "The line of balls can be formed in a horizontal, vertical, or diagonal direction.",
   "rule7": "The player can preview the next three balls that will appear on the board in the upcoming turn.",
   "rule8": "The goal of the game is to strategically move the balls to create lines of the same color and remove them from the board. Plan your moves carefully to maximize the number of lines formed and try to achieve the highest score possible. Good luck!",
-  "openRules": "Open Rules"
+  "openRules": "Open Rules",
+  "Close": "Close"
 }
