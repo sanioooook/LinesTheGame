@@ -1,7 +1,7 @@
 import {createSlice, Slice} from '@reduxjs/toolkit';
 import {errorSignIn, errorSignOut, successSignIn, successSignOut} from '../actions/google.actions';
 import {GoogleAuthProvider} from 'firebase/auth';
-import {UserInfo} from '@firebase/auth';
+import {UserInfo} from 'firebase/auth';
 
 export type InitialState = {
   user: UserInfo | null;
