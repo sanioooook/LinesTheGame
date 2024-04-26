@@ -1,7 +1,13 @@
 {
   "short_name": "Lines",
   "name": "Lines the game",
+  "description": "Lines the game",
   "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "76x76",
+      "type": "image/png"
+    }
   ],
   "start_url": ".",
   "display": "standalone",

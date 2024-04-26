@@ -1,0 +1,36 @@
+$background-color: #0c45a3;
+
+.google-sign-in-button {
+  width: fit-content;
+  height: 30px;
+  background-color: $background-color;
+  color: white;
+  padding: 20px 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 30px;
+
+  img {
+    width: 30px;
+    height: 30px;
+
+    &[src*="google"] {
+      border-radius: 15px;
+    }
+  }
+
+  &:hover {
+    background-color: darken($background-color, 5%);
+  }
+
+  &:active {
+    background-color: darken($background-color, 10%);
+  }
+}

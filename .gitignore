@@ -1,2 +1,4 @@
 
 lines/package-lock.json
+
+*.log

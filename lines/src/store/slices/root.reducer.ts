@@ -1,9 +1,10 @@
 import gameBoardReducer from './gameBoard.slice';
-import {combineReducers} from "@reduxjs/toolkit";
+import googleReducer from './google.slice';
+import {combineReducers} from '@reduxjs/toolkit';
 
-const rootReducer =
-    combineReducers({
-        gameBoard: gameBoardReducer,
-    });
+const rootReducer = combineReducers({
+  gameBoard: gameBoardReducer,
+  google: googleReducer,
+});
 
 export default rootReducer;

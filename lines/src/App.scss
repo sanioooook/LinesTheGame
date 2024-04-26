@@ -1,17 +1,38 @@
-@use "sass:math";
+@use 'sass:math';
 
 $field-width: 80px;
 $filed-height: 80px;
 $start-z-index: 0;
-$colors: [
-        ("name": "red", "color": rgba(255, 0, 0, 1)),
-        ("name": "blue", "color": rgba(0, 0, 255, 1)),
-        ("name": "green", "color": rgba(0,132,0, 1)),
-        ("name": "yellow", "color": rgb(222,222,22)),
-        ("name": "purple", "color": rgba(128, 0, 128, 1)),
-        ("name": "pink", "color": rgb(255,20,147)),
-        ("name": "orange", "color": rgba(255, 165, 0, 1))
-];
+$colors:
+  [
+    (
+      'name': 'red',
+      'color': rgba(255, 0, 0, 1),
+    ),
+  (
+    'name': 'blue',
+    'color': rgba(0, 0, 255, 1),
+  ),
+  (
+    'name': 'green',
+    'color': rgba(0, 132, 0, 1),
+  ),
+  (
+    'name': 'yellow',
+    'color': rgb(222, 222, 22),
+  ),
+  (
+    'name': 'purple',
+    'color': rgba(128, 0, 128, 1),
+  ),
+  (
+    'name': 'pink',
+    'color': rgb(255, 20, 147),
+  ),
+  (
+      'name': 'orange',
+      'color': rgba(255, 165, 0, 1),
+    )];
 
 @mixin field {
   width: $field-width;
@@ -34,8 +55,8 @@ $colors: [
   }
 
   @each $color-map in $colors {
-    $name-color: map-get($color-map, "name");
-    $color: map-get($color-map, "color");
+    $name-color: map-get($color-map, 'name');
+    $color: map-get($color-map, 'color');
     .ball-#{$name-color} {
       background-color: $color;
     }
@@ -45,8 +66,8 @@ $colors: [
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: beige;
@@ -79,8 +100,8 @@ body {
       }
 
       .buttons-and-selector {
-        $raspberry: #C2185B; // Raspberry color from Material Design palette
-        $white: #FFFFFF; // White color
+        $raspberry: #c2185b; // Raspberry color from Material Design palette
+        $white: #ffffff; // White color
 
         display: flex;
         flex-direction: column;
@@ -106,7 +127,10 @@ body {
           }
 
           &:hover {
-            background-color: darken($raspberry, 10%); // Darkens the background color a bit when hovering
+            background-color: darken(
+              $raspberry,
+              10%
+            ); // Darkens the background color a bit when hovering
 
             // Rotate the icon when hovering over the button
             .icon {
@@ -115,7 +139,10 @@ body {
           }
 
           &:active {
-            background-color: darken($raspberry, 20%); // Darkens the background color a bit more when active (clicked)
+            background-color: darken(
+              $raspberry,
+              20%
+            ); // Darkens the background color a bit more when active (clicked)
           }
 
           &:focus {
@@ -124,7 +151,10 @@ body {
           }
 
           &:disabled {
-            background-color: lighten($raspberry, 40%); // Lightens the background color when the button is disabled
+            background-color: lighten(
+              $raspberry,
+              40%
+            ); // Lightens the background color when the button is disabled
             cursor: not-allowed;
           }
 
@@ -141,7 +171,7 @@ body {
         opacity: 1;
       }
       50% {
-        opacity: .3;
+        opacity: 0.3;
       }
       100% {
         opacity: 1;
@@ -207,7 +237,7 @@ body {
 
 @media (max-width: 1375px) {
   body .main {
-    grid-template-rows: 1fr .2fr;
+    grid-template-rows: 1fr 0.2fr;
     grid-template-columns: 1fr;
 
     .navigations {
