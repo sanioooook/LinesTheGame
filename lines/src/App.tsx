@@ -4,7 +4,7 @@ import {GameBoardComponent} from './components/GameBoard/GameBoard';
 import {Field} from './types/field.type';
 import {
   changeLanguage,
-  changeSelectedBall,
+  changeSelectedBall, getScoreFromGoogle,
   moveBallAndCheckLines,
   restartGameAndTrySendResultToGoogle,
   startGame,
@@ -39,6 +39,15 @@ export const App: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  useEffect(() => {
+    dispatch(getScoreFromGoogle());
+    const intervalId = setInterval(() => {
+      dispatch(getScoreFromGoogle());
+    }, 5 * 60 * 1000); // 5 minutes in milliseconds
+
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     if (board.flat().filter((x) => x.ball).length === 0) {
       dispatch(startGame());
