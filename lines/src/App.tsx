@@ -20,6 +20,7 @@ import LanguageSelect from './components/LanguageSelect/LanguageSelect';
 import {LanguagesEnum} from './types/languages.enum';
 import Modal from './components/Modal/Modal';
 import GoogleSignInButton from './components/GoogleSignInButton/GoogleSignInButton';
+import {RulesComponent} from './components/Rules/RulesComponent';
 
 export const App: React.FC = () => {
   const {t} = useTranslation();
@@ -30,14 +31,14 @@ export const App: React.FC = () => {
   const scores = useAppSelector((state) => state.gameBoard.score);
   const language = useAppSelector((state) => state.gameBoard.selectedLanguage);
   const dispatch = useAppDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalRulesOpen, setIsModalRulesOpen] = useState(false);
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    setIsModalRulesOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsModalRulesOpen(false);
   };
   useEffect(() => {
     dispatch(getScoreFromGoogle());
@@ -95,7 +96,12 @@ export const App: React.FC = () => {
           <button className={`button`} onClick={handleOpenModal}>
             {t('openRules')}
           </button>
-          <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
+          <Modal
+            isOpen={isModalRulesOpen}
+            onClose={handleCloseModal}
+            component={<RulesComponent/>}
+            title={t('rules')}
+          />
           <button className={'button'} onClick={handleClickRestart}>
             <img className={'icon'} src={svgRestart} alt={''} />
             {t('restart')}

@@ -8,7 +8,7 @@
   "Russian": "Russian",
   "English": "English",
   "rules": "Rules",
-  "rule0": "The game board consists of a square grid of 9x9 cells, where the program randomly places 3 balls of different colors in some cells.",
+  "rule0": "The game board consists of a square grid of 9x9 cells, where the program randomly places 3 balls, which can be of the same or different colors, in some cells.",
   "rule1": "There are a total of 7 possible colors for the balls.",
   "rule2": "On each turn, the player can move one ball by selecting it and indicating its new location.",
   "rule3": "To make a move, there must be a clear path between the starting and ending cells, with no obstacles in between.",
@@ -18,5 +18,8 @@
   "rule7": "The player can preview the next three balls that will appear on the board in the upcoming turn.",
   "rule8": "The goal of the game is to strategically move the balls to create lines of the same color and remove them from the board. Plan your moves carefully to maximize the number of lines formed and try to achieve the highest score possible. Good luck!",
   "openRules": "Open Rules",
-  "Close": "Close"
+  "Close": "Close",
+  "Stay": "Stay",
+  "Log out": "Log out",
+  "Are you sure you want log out?": "Are you sure you want log out?"
 }

@@ -1,0 +1,53 @@
+@mixin button($background-color, $text-color, $class-name) {
+  #{$class-name} {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $background-color;
+    color: $text-color;
+    padding: 12px 24px;
+    font-size: 14px;
+    border: none;
+    border-radius: 28px; // Makes the button rounded
+    text-transform: uppercase; // Material Design buttons typically have uppercase text
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: 48px;
+
+    .icon {
+      margin-right: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    // Darkens the background color a bit when hovering
+    &:hover {
+      background-color: darken($background-color, 10%);
+
+      // Rotate the icon when hovering over the button
+      .icon {
+        transform: rotate(360deg);
+      }
+    }
+
+    &:active {
+      // Darkens the background color a bit more when active (clicked)
+      background-color: darken($background-color, 20%);
+    }
+
+    &:focus {
+      outline: none; // Removes the default focus outline
+      box-shadow: 0 0 0 3px rgba($background-color, 0.3); // Adds a custom focus outline using a box shadow
+    }
+
+    &:disabled {
+      // Lightens the background color when the button is disabled
+      background-color: lighten($background-color, 40%);
+      cursor: not-allowed;
+    }
+
+    & ~ .button {
+      margin-top: 1rem;
+      //margin-left: 1rem;
+    }
+  }
+}

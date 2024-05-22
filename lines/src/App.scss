@@ -1,4 +1,5 @@
 @use 'sass:math';
+@import "styles/button";
 
 $field-width: 80px;
 $filed-height: 80px;
@@ -63,6 +64,7 @@ $colors:
   }
 }
 
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -100,69 +102,13 @@ body {
       }
 
       .buttons-and-selector {
-        $raspberry: #c2185b; // Raspberry color from Material Design palette
-        $white: #ffffff; // White color
+        $background-color: #c2185b; // Raspberry color from Material Design palette
+        $color: #ffffff; // White color
 
         display: flex;
         flex-direction: column;
 
-        .button {
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          background-color: $raspberry;
-          color: $white;
-          padding: 12px 24px;
-          font-size: 14px;
-          border: none;
-          border-radius: 28px; // Makes the button rounded
-          text-transform: uppercase; // Material Design buttons typically have uppercase text
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-          height: 48px;
-
-          .icon {
-            margin-right: 8px;
-            transition: transform 0.3s ease;
-          }
-
-          &:hover {
-            background-color: darken(
-              $raspberry,
-              10%
-            ); // Darkens the background color a bit when hovering
-
-            // Rotate the icon when hovering over the button
-            .icon {
-              transform: rotate(360deg);
-            }
-          }
-
-          &:active {
-            background-color: darken(
-              $raspberry,
-              20%
-            ); // Darkens the background color a bit more when active (clicked)
-          }
-
-          &:focus {
-            outline: none; // Removes the default focus outline
-            box-shadow: 0 0 0 3px rgba($raspberry, 0.3); // Adds a custom focus outline using a box shadow
-          }
-
-          &:disabled {
-            background-color: lighten(
-              $raspberry,
-              40%
-            ); // Lightens the background color when the button is disabled
-            cursor: not-allowed;
-          }
-
-          & ~ .button {
-            margin-top: 1rem;
-            //margin-left: 1rem;
-          }
-        }
+        @include button($background-color, $color, ".button");
       }
     }
 
