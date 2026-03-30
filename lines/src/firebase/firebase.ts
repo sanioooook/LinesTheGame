@@ -23,5 +23,5 @@ provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 export const auth = getAuth();
 if (process.env.NODE_ENV !== 'production') {
   connectFirestoreEmulator(firestore, 'localhost', 8080);
-  connectAuthEmulator(auth, "http://localhost:9099");
+  connectAuthEmulator(auth, 'http://localhost:9099');
 }

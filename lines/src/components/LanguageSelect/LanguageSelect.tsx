@@ -9,11 +9,7 @@ interface LanguageSelectProps {
   onLanguageChange: (language: LanguagesEnum) => void;
 }
 
-const LanguageSelect: FC<LanguageSelectProps> = ({
-  languages,
-  selectedLanguage,
-  onLanguageChange,
-}) => {
+const LanguageSelect: FC<LanguageSelectProps> = ({languages, selectedLanguage, onLanguageChange}) => {
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     onLanguageChange(+event.target.value);
   };
@@ -23,12 +19,7 @@ const LanguageSelect: FC<LanguageSelectProps> = ({
       <label htmlFor="language-select" className="language-select-label">
         {t('selectLanguage')}
       </label>
-      <select
-        className={'language-select'}
-        value={selectedLanguage}
-        onChange={handleChange}
-        id="language-select"
-      >
+      <select className={'language-select'} value={selectedLanguage} onChange={handleChange} id="language-select">
         {languages.map((language) => (
           <option key={language.value} value={language.value}>
             {t(language.label)}

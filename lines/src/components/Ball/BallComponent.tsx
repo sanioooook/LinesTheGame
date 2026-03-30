@@ -1,5 +1,5 @@
 import React from 'react';
-import {Ball} from '../../interfaces/IBall';
+import {Ball} from '../../types/ball.type';
 import {BallColor} from '../../types/ballColor.enum';
 
 export interface BallComponentProps {
@@ -8,23 +8,14 @@ export interface BallComponentProps {
   canBeSelected?: boolean;
 }
 
-export const BallComponent: React.FC<BallComponentProps> = ({
-  ball,
-  onSelectBall,
-  canBeSelected = true,
-}: BallComponentProps) => {
+export const BallComponent: React.FC<BallComponentProps> = ({ball, onSelectBall, canBeSelected = true}: BallComponentProps) => {
   let content;
   if (canBeSelected) {
     content = (
-      <div
-        className={`ball ball-${BallColor[ball.color].toString()} ${ball.isSelected ? 'ball-selected' : ''}`}
-        onClick={onSelectBall}
-      />
+      <div className={`ball ball-${BallColor[ball.color].toString()} ${ball.isSelected ? 'ball-selected' : ''}`} onClick={onSelectBall} />
     );
   } else {
-    content = (
-      <div className={`ball ball-${BallColor[ball.color].toString()}`} />
-    );
+    content = <div className={`ball ball-${BallColor[ball.color].toString()}`} />;
   }
   return content;
 };

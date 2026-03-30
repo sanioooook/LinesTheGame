@@ -9,23 +9,17 @@ export type GameBoardProps = {
   onClickForMoveBall: (field: Field) => void;
 };
 
-export const GameBoardComponent: React.FC<GameBoardProps> = ({
-  board,
-  onSelectBall,
-  onClickForMoveBall,
-}) => {
+const GameBoardComponent: React.FC<GameBoardProps> = ({board, onSelectBall, onClickForMoveBall}) => {
   return (
     <div className="game-board">
       {board.map((row) =>
         row.map((field) => (
-          <FieldComponent
-            field={field}
-            onSelectBall={onSelectBall}
-            onClickForMoveBall={onClickForMoveBall}
-            key={`${field.i}-${field.j}`}
-          />
-        ))
+          <FieldComponent field={field} onSelectBall={onSelectBall} onClickForMoveBall={onClickForMoveBall} key={`${field.i}-${field.j}`} />
+        )),
       )}
     </div>
   );
 };
+
+GameBoardComponent.displayName = 'GameBoardComponent';
+export default React.memo(GameBoardComponent);

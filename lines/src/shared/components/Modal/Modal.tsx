@@ -24,9 +24,7 @@ const Modal: React.FC<ModalProps> = ({isOpen, onClose, component, title}) => {
             &times;
           </button>
         </div>
-        <div className="modal-body">
-          {component}
-        </div>
+        <div className="modal-body">{component}</div>
         <div className="modal-footer">
           <button className="close-button" onClick={onClose}>
             {t('Close')}

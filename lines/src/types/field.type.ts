@@ -1,4 +1,4 @@
-import {Ball} from '../interfaces/IBall';
+import {Ball} from './ball.type';
 
 export type Field = {
   ball: Ball | null;

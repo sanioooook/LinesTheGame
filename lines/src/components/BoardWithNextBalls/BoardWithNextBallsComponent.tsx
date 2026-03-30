@@ -1,14 +1,12 @@
 import React from 'react';
 import {FieldComponent} from '../Field/FieldComponent';
-import {Ball} from '../../interfaces/IBall';
+import {Ball} from '../../types/ball.type';
 
 export type BoardWithNextBallsProps = {
   boardWithNextBalls: Ball[];
 };
 
-export const BoardWithNextBallsComponent: React.FC<BoardWithNextBallsProps> = ({
-  boardWithNextBalls,
-}) => {
+export const BoardWithNextBallsComponent: React.FC<BoardWithNextBallsProps> = ({boardWithNextBalls}) => {
   return (
     <div className="board-with-next-balls">
       {boardWithNextBalls.map((ball, i) => (

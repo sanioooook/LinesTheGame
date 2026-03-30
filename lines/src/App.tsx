@@ -1,14 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.scss';
-import {GameBoardComponent} from './components/GameBoard/GameBoard';
-import {Field} from './types/field.type';
-import {
-  changeLanguage,
-  changeSelectedBall, getScoreFromGoogle,
-  moveBallAndCheckLines,
-  restartGameAndTrySendResultToGoogle,
-  startGame,
-} from './store/actions/gameBoard.actions';
+import {changeLanguage} from './store/actions/gameBoard.actions';
 import {GameBoard} from './types/gameBoard.type';
 import {useAppDispatch, useAppSelector} from './store/hooks';
 import {BoardWithNextBallsComponent} from './components/BoardWithNextBalls/BoardWithNextBallsComponent';
@@ -17,65 +9,31 @@ import './i18n';
 import {useTranslation} from 'react-i18next';
 import svgRestart from './svg/autorenew_white_24dp.svg';
 import LanguageSelect from './components/LanguageSelect/LanguageSelect';
-import {LanguagesEnum} from './types/languages.enum';
-import Modal from './components/Modal/Modal';
+import Modal from './shared/components/Modal/Modal';
 import GoogleSignInButton from './components/GoogleSignInButton/GoogleSignInButton';
 import {RulesComponent} from './components/Rules/RulesComponent';
+import {useAutoUpdateScore} from './shared/hooks/useAutoUpdateScore';
+import {useGameBoardActions} from './shared/hooks/useGameBoardActions';
+import {useStartGameOnEmptyBoard} from './shared/hooks/useStartGameOnEmptyBoard';
+import {useSyncLanguageEffect} from './shared/hooks/useSyncLanguageEffect';
+import {availableLanguages} from './constants/languages';
+import {Ball} from './types/ball.type';
+import GameBoardComponent from './components/GameBoard/GameBoard';
 
 export const App: React.FC = () => {
   const {t} = useTranslation();
   const board: GameBoard = useAppSelector((state) => state.gameBoard.board);
-  const boardWithNextBalls = useAppSelector(
-    (state) => state.gameBoard.boardWithNextBalls
-  );
+  const boardWithNextBalls = useAppSelector((state) => state.gameBoard.boardWithNextBalls);
   const scores = useAppSelector((state) => state.gameBoard.score);
   const language = useAppSelector((state) => state.gameBoard.selectedLanguage);
   const dispatch = useAppDispatch();
+  const {moveBall, selectBall, restart} = useGameBoardActions();
   const [isModalRulesOpen, setIsModalRulesOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalRulesOpen(true);
-  };
+  useAutoUpdateScore();
+  useStartGameOnEmptyBoard();
+  useSyncLanguageEffect();
 
-  const handleCloseModal = () => {
-    setIsModalRulesOpen(false);
-  };
-  useEffect(() => {
-    dispatch(getScoreFromGoogle());
-    const intervalId = setInterval(() => {
-      dispatch(getScoreFromGoogle());
-    }, 5 * 60 * 1000); // 5 minutes in milliseconds
-
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    if (board.flat().filter((x) => x.ball).length === 0) {
-      dispatch(startGame());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    dispatch(changeLanguage(language));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
-
-  const handleLanguageChange = (newLanguage: LanguagesEnum) => {
-    dispatch(changeLanguage(newLanguage));
-  };
-
-  const handleSelectBall = (field: Field) => {
-    dispatch(changeSelectedBall(field));
-  };
-
-  const handleMoveBall = (field: Field) => {
-    // @ts-ignore
-    dispatch(moveBallAndCheckLines(field));
-  };
-
-  const handleClickRestart = () => {
-    dispatch(restartGameAndTrySendResultToGoogle());
-  };
   return (
     <div className={`main`}>
       <div className={`navigations`}>
@@ -84,39 +42,26 @@ export const App: React.FC = () => {
         </div>
         <div className={`buttons-and-selector`}>
           <LanguageSelect
-            languages={[
-              {value: LanguagesEnum.en, label: 'English'},
-              {value: LanguagesEnum.ru, label: 'Russian'},
-              {value: LanguagesEnum.ua, label: 'Ukrainian'},
-            ]}
+            languages={availableLanguages}
             selectedLanguage={language}
-            onLanguageChange={handleLanguageChange}
+            onLanguageChange={(newLanguage) => dispatch(changeLanguage(newLanguage))}
           />
 
-          <button className={`button`} onClick={handleOpenModal}>
+          <button className={`button`} onClick={() => setIsModalRulesOpen(true)}>
             {t('openRules')}
           </button>
-          <Modal
-            isOpen={isModalRulesOpen}
-            onClose={handleCloseModal}
-            component={<RulesComponent/>}
-            title={t('rules')}
-          />
-          <button className={'button'} onClick={handleClickRestart}>
+          <Modal isOpen={isModalRulesOpen} onClose={() => setIsModalRulesOpen(false)} component={<RulesComponent />} title={t('rules')} />
+          <button className={'button'} onClick={restart}>
             <img className={'icon'} src={svgRestart} alt={''} />
             {t('restart')}
           </button>
         </div>
       </div>
       <div className={`centered-game-board`}>
-        <BoardWithNextBallsComponent boardWithNextBalls={boardWithNextBalls} />
-        <GameBoardComponent
-          board={board}
-          onSelectBall={handleSelectBall}
-          onClickForMoveBall={handleMoveBall}
-        />
+        <BoardWithNextBallsComponent boardWithNextBalls={boardWithNextBalls as Ball[]} />
+        <GameBoardComponent board={board} onSelectBall={selectBall} onClickForMoveBall={moveBall} />
       </div>
-      <GoogleSignInButton/>
+      <GoogleSignInButton />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Field} from '../../types/field.type';
 import {BallComponent} from '../Ball/BallComponent';
 
@@ -9,33 +9,13 @@ export interface FieldProps {
   canBeClicked?: boolean;
 }
 
-export const FieldComponent: React.FC<FieldProps> = ({
-  field,
-  onSelectBall,
-  onClickForMoveBall,
-  canBeClicked = true,
-}) => {
-  let contentWithBall;
-  const handleSelectBall = () => {
+export const FieldComponent: React.FC<FieldProps> = ({field, onSelectBall, onClickForMoveBall, canBeClicked = true}) => {
+  const handleSelectBall = useCallback(() => {
     onSelectBall(field);
-  };
-  if (field.ball) {
-    contentWithBall = (
-      <BallComponent
-        ball={field.ball}
-        onSelectBall={handleSelectBall}
-        canBeSelected={canBeClicked}
-      />
-    );
-  } else {
-    contentWithBall = <div />;
-  }
+  }, [field, onSelectBall]);
   return (
-    <div
-      className={`field`}
-      onClick={() => (!field.ball ? onClickForMoveBall(field) : undefined)}
-    >
-      {contentWithBall}
+    <div className={`field`} onClick={() => (!field.ball ? onClickForMoveBall(field) : undefined)}>
+      {field.ball ? <BallComponent ball={field.ball} onSelectBall={handleSelectBall} canBeSelected={canBeClicked} /> : <div />}
     </div>
   );
 };
