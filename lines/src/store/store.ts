@@ -6,14 +6,18 @@ import CryptoJS from 'crypto-js';
 const secretKey = import.meta.env.VITE_SECRET_KEY ?? 'secret';
 
 const loadFromLocalStorage = (): {gameBoard: GameBoardInitialState; google: GoogleInitialState} => {
-  const serializedState = localStorage.getItem('gameState');
-  if (serializedState) {
+  const fallback = {gameBoard: gameBoardInitialStateFromStore, google: googleInitialStateFromStore};
+  try {
+    const serializedState = localStorage.getItem('gameState');
+    if (!serializedState) return fallback;
     const bytes = CryptoJS.AES.decrypt(serializedState, secretKey);
     const originalState = bytes.toString(CryptoJS.enc.Utf8);
+    if (!originalState) return fallback;
     const parsedState: {gameBoard: GameBoardInitialState; google: GoogleInitialState} = JSON.parse(originalState);
     return {gameBoard: parsedState.gameBoard, google: parsedState.google};
-  } else {
-    return {gameBoard: gameBoardInitialStateFromStore, google: googleInitialStateFromStore};
+  } catch {
+    localStorage.removeItem('gameState');
+    return fallback;
   }
 };
 
