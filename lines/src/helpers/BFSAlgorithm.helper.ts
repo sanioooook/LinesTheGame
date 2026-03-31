@@ -47,7 +47,9 @@ export function findPath(start: Field, end: Field, board: GameBoard): Field[] | 
   ];
 
   while (queue.length > 0) {
-    const {i, j} = queue.shift()!;
+    const shifted = queue.shift();
+    if (!shifted) break;
+    const {i, j} = shifted;
 
     if (i === end.i && j === end.j) {
       const path: Field[] = [];

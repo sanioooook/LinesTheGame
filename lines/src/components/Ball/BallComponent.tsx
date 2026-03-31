@@ -4,7 +4,7 @@ import {BallColor} from '../../types/ballColor.enum';
 
 export interface BallComponentProps {
   ball: Ball;
-  onSelectBall: () => any;
+  onSelectBall: () => void;
   canBeSelected?: boolean;
 }
 

@@ -23,7 +23,7 @@ export const googleSlice: Slice<InitialState, NonNullable<unknown>, 'google'> = 
         const errorCode = payload.code;
         const errorMessage = payload.message;
         // The email of the user's account used.
-        const email = payload.customData.email;
+        const email = payload.customData?.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(payload);
         console.error(`${errorCode} ${errorMessage} \nAdditional info credential: ${credential}; email: ${email}`);

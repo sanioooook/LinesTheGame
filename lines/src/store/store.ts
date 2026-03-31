@@ -1,4 +1,4 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {configureStore, Middleware} from '@reduxjs/toolkit';
 import rootReducer from './slices/root.reducer';
 import {InitialState as GameBoardInitialState, initialState as gameBoardInitialStateFromStore} from './slices/gameBoard.slice';
 import {InitialState as GoogleInitialState, initialState as googleInitialStateFromStore} from './slices/google.slice';
@@ -19,9 +19,9 @@ const loadFromLocalStorage = (): {gameBoard: GameBoardInitialState; google: Goog
 
 const initialStateGameBoard = loadFromLocalStorage();
 
-const saveToLocalStorage = (store: {getState: () => any}) => (next: (arg0: any) => any) => (action: any) => {
+const saveToLocalStorage: Middleware = (storeAPI) => (next) => (action) => {
   const result = next(action);
-  const serializedState = JSON.stringify(store.getState());
+  const serializedState = JSON.stringify(storeAPI.getState());
   const encryptedState = CryptoJS.AES.encrypt(serializedState, secretKey).toString();
   localStorage.setItem('gameState', encryptedState);
   return result;

@@ -13,5 +13,5 @@ export function useAutoUpdateScore() {
       5 * 60 * 1000,
     );
     return () => clearInterval(intervalId);
-  }, []);
+  }, [dispatch]);
 }
