@@ -8,8 +8,11 @@ import {
   changeSelectedBall,
   incrementScore,
   moveBall,
+  moveBallStep,
   placeBallsAndGenerateNextBalls,
   restartGame,
+  setIsAnimating,
+  setShakingField,
   startGame,
 } from '../actions/gameBoard.actions';
 import {Field} from '../../types/field.type';
@@ -27,6 +30,10 @@ export type InitialState = {
   };
   boardWithNextBalls: Ball[] | undefined[];
   selectedLanguage: LanguagesEnum;
+  animation: {
+    isAnimating: boolean;
+    shakingField: {i: number; j: number} | null;
+  };
 };
 
 export const initialState: InitialState = {
@@ -41,6 +48,10 @@ export const initialState: InitialState = {
     return undefined;
   }),
   selectedLanguage: LanguagesEnum.en,
+  animation: {
+    isAnimating: false,
+    shakingField: null,
+  },
 };
 
 function initializeBoardWithBalls(state: InitialState): void {
@@ -123,6 +134,21 @@ export const gameBoardSlice: Slice<InitialState, NonNullable<unknown>, 'gameBoar
       })
       .addCase(applyLatestScore, (state, action) => {
         state.score.latestScore = action.payload;
+      })
+      .addCase(moveBallStep, (state, {payload}) => {
+        const {fromI, fromJ, toI, toJ} = payload;
+        const ball = state.board[fromI][fromJ].ball;
+        state.board[toI][toJ].ball = ball ? {...ball, isSelected: false} : null;
+        state.board[fromI][fromJ].ball = null;
+        state.currentSelectedField = null;
+      })
+      .addCase(setIsAnimating, (state, {payload}) => {
+        if (!state.animation) state.animation = {isAnimating: false, shakingField: null};
+        state.animation.isAnimating = payload;
+      })
+      .addCase(setShakingField, (state, {payload}) => {
+        if (!state.animation) state.animation = {isAnimating: false, shakingField: null};
+        state.animation.shakingField = payload;
       });
   },
 });

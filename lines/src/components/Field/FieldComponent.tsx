@@ -7,14 +7,15 @@ export interface FieldProps {
   onSelectBall: (field: Field) => void;
   onClickForMoveBall: (field: Field) => void;
   canBeClicked?: boolean;
+  isShaking?: boolean;
 }
 
-export const FieldComponent: React.FC<FieldProps> = ({field, onSelectBall, onClickForMoveBall, canBeClicked = true}) => {
+export const FieldComponent: React.FC<FieldProps> = ({field, onSelectBall, onClickForMoveBall, canBeClicked = true, isShaking = false}) => {
   const handleSelectBall = useCallback(() => {
     onSelectBall(field);
   }, [field, onSelectBall]);
   return (
-    <div className={`field`} onClick={() => (!field.ball ? onClickForMoveBall(field) : undefined)}>
+    <div className={`field${isShaking ? ' field-shaking' : ''}`} onClick={() => (!field.ball ? onClickForMoveBall(field) : undefined)}>
       {field.ball ? <BallComponent ball={field.ball} onSelectBall={handleSelectBall} canBeSelected={canBeClicked} /> : <div />}
     </div>
   );

@@ -1,12 +1,19 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {Field} from '../../types/field.type';
 import {RootState} from '../store';
-import {isPathBetween, findAndRemoveLines} from '../../helpers/BFSAlgorithm.helper';
+import {findPath, findAndRemoveLines} from '../../helpers/BFSAlgorithm.helper';
 import {GameBoard} from '../../types/gameBoard.type';
 import {LanguagesEnum} from '../../types/languages.enum';
 import {updateScore, getScore} from '../../firebase/functions/function-helper';
 
 const baseType = 'GAME_BOARD/';
+
+const STEP_DELAY_MS = 80;
+const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+export const setIsAnimating = createAction<boolean>(`${baseType}SET_IS_ANIMATING`);
+export const setShakingField = createAction<{i: number; j: number} | null>(`${baseType}SET_SHAKING_FIELD`);
+export const moveBallStep = createAction<{fromI: number; fromJ: number; toI: number; toJ: number}>(`${baseType}MOVE_BALL_STEP`);
 
 export const changeSelectedBall = createAction<Field>(`${baseType}CHANGE_SELECTED`);
 export const changeBoard = createAction<GameBoard>(`${baseType}CHANGE_BOARD`);
@@ -30,13 +37,28 @@ export const moveBallAndCheckLines = createAsyncThunk<void, Field, {state: RootS
         return;
       }
 
-      // Check if there is a path between start and end field
-      if (!isPathBetween(currentSelectedField, endField, getState().gameBoard.board)) {
+      // Find path via BFS
+      const path = findPath(currentSelectedField, endField, getState().gameBoard.board);
+
+      if (!path) {
+        // Blocked — shake animation
+        dispatch(setShakingField({i: currentSelectedField.i, j: currentSelectedField.j}));
+        await delay(400);
+        dispatch(setShakingField(null));
         return;
       }
 
-      // Move the ball
-      dispatch(moveBall(endField));
+      // Animate step by step along the path
+      dispatch(setIsAnimating(true));
+      let fromI = currentSelectedField.i;
+      let fromJ = currentSelectedField.j;
+      for (const step of path) {
+        dispatch(moveBallStep({fromI, fromJ, toI: step.i, toJ: step.j}));
+        fromI = step.i;
+        fromJ = step.j;
+        await delay(STEP_DELAY_MS);
+      }
+      dispatch(setIsAnimating(false));
 
       // Check lines
       const {newBoard, linesFound, scoreIncrement} = findAndRemoveLines(getState().gameBoard.board);

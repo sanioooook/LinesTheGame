@@ -7,14 +7,21 @@ export type GameBoardProps = {
   board: GameBoard;
   onSelectBall: (field: Field) => void;
   onClickForMoveBall: (field: Field) => void;
+  shakingField?: {i: number; j: number} | null;
 };
 
-const GameBoardComponent: React.FC<GameBoardProps> = ({board, onSelectBall, onClickForMoveBall}) => {
+const GameBoardComponent: React.FC<GameBoardProps> = ({board, onSelectBall, onClickForMoveBall, shakingField}) => {
   return (
     <div className="game-board">
       {board.map((row) =>
         row.map((field) => (
-          <FieldComponent field={field} onSelectBall={onSelectBall} onClickForMoveBall={onClickForMoveBall} key={`${field.i}-${field.j}`} />
+          <FieldComponent
+            field={field}
+            onSelectBall={onSelectBall}
+            onClickForMoveBall={onClickForMoveBall}
+            isShaking={shakingField?.i === field.i && shakingField?.j === field.j}
+            key={`${field.i}-${field.j}`}
+          />
         )),
       )}
     </div>

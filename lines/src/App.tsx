@@ -26,6 +26,7 @@ export const App: React.FC = () => {
   const boardWithNextBalls = useAppSelector((state) => state.gameBoard.boardWithNextBalls);
   const scores = useAppSelector((state) => state.gameBoard.score);
   const language = useAppSelector((state) => state.gameBoard.selectedLanguage);
+  const shakingField = useAppSelector((state) => state.gameBoard.animation?.shakingField ?? null);
   const dispatch = useAppDispatch();
   const {moveBall, selectBall, restart} = useGameBoardActions();
   const [isModalRulesOpen, setIsModalRulesOpen] = useState(false);
@@ -59,7 +60,7 @@ export const App: React.FC = () => {
       </div>
       <div className={`centered-game-board`}>
         <BoardWithNextBallsComponent boardWithNextBalls={boardWithNextBalls as Ball[]} />
-        <GameBoardComponent board={board} onSelectBall={selectBall} onClickForMoveBall={moveBall} />
+        <GameBoardComponent board={board} onSelectBall={selectBall} onClickForMoveBall={moveBall} shakingField={shakingField} />
       </div>
       <GoogleSignInButton />
     </div>
