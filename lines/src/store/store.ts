@@ -3,7 +3,7 @@ import rootReducer from './slices/root.reducer';
 import {InitialState as GameBoardInitialState, initialState as gameBoardInitialStateFromStore} from './slices/gameBoard.slice';
 import {InitialState as GoogleInitialState, initialState as googleInitialStateFromStore} from './slices/google.slice';
 import CryptoJS from 'crypto-js';
-const secretKey = process.env.REACT_APP_SECRET_KEY ?? 'secret';
+const secretKey = import.meta.env.VITE_SECRET_KEY ?? 'secret';
 
 const loadFromLocalStorage = (): {gameBoard: GameBoardInitialState; google: GoogleInitialState} => {
   const serializedState = localStorage.getItem('gameState');
