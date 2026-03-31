@@ -1,5 +1,6 @@
 @use 'sass:math';
-@import "styles/button";
+@use 'sass:map';
+@use 'styles/button' as *;
 
 $field-width: 80px;
 $filed-height: 80px;
@@ -56,8 +57,8 @@ $colors:
   }
 
   @each $color-map in $colors {
-    $name-color: map-get($color-map, 'name');
-    $color: map-get($color-map, 'color');
+    $name-color: map.get($color-map, 'name');
+    $color: map.get($color-map, 'color');
     .ball-#{$name-color} {
       background-color: $color;
     }

@@ -1,4 +1,5 @@
-@import "../../styles/button";
+@use 'sass:color';
+@use '../../styles/button' as *;
 
 $background-color: #0c45a3;
 
@@ -31,11 +32,11 @@ $background-color: #0c45a3;
   }
 
   &:hover {
-    background-color: darken($background-color, 5%);
+    background-color: color.adjust($background-color, $lightness: -5%);
   }
 
   &:active {
-    background-color: darken($background-color, 10%);
+    background-color: color.adjust($background-color, $lightness: -10%);
   }
 }
 
