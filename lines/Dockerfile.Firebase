@@ -1,33 +1,22 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
+# Eclipse Temurin is the official JDK image (Java 21 required by firebase-tools)
+FROM eclipse-temurin:21-jre-jammy
 
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
-ARG NODE_VERSION=18.18.2
-ARG AUTH_PORT=9099
-ARG UI_PORT=4000
-ARG FIRESTORE_PORT=8080
-
-################################################################################
-# Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-buster as base
-
-# Set working directory for all build stages.
 WORKDIR /usr/src/app
 
-# Install Java
-RUN apt-get update && apt-get install -y openjdk-11-jre
+# Install Node.js 22
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install firebase CLI
 RUN npm install -g firebase-tools
 
 COPY firebase.json firestore.rules .firebaserc ./
 
-# Expose the port that the application listens on.
-EXPOSE $AUTH_PORT $UI_PORT $FIRESTORE_PORT 4400
+EXPOSE 9099 8080 4000 4400
 
-# Run the application.
-CMD ["firebase", "emulators:start"]
+# --project demo-* runs without Google authentication (no firebase login needed)
+CMD ["firebase", "emulators:start", "--project", "demo-lines"]

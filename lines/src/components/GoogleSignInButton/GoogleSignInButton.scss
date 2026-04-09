@@ -25,6 +25,12 @@ $background-color: #0c45a3;
   img {
     width: 30px;
     height: 30px;
+    flex-shrink: 0;
+
+    &.user-avatar {
+      border-radius: 50%;
+      object-fit: cover;
+    }
 
     &[src*="google"] {
       border-radius: 15px;

@@ -21,5 +21,9 @@
   "Close": "Close",
   "Stay": "Stay",
   "Log out": "Log out",
-  "Are you sure you want log out?": "Are you sure you want log out?"
+  "Are you sure you want log out?": "Are you sure you want log out?",
+  "undo": "Undo Move",
+  "leaderboard": "Leaderboard",
+  "player": "Player",
+  "leaderboardEmpty": "No scores yet. Be the first!"
 }

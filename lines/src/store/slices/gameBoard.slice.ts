@@ -6,19 +6,29 @@ import {
   changeBoard,
   changeLanguage,
   changeSelectedBall,
+  incrementMoveNumber,
   incrementScore,
   moveBall,
   moveBallStep,
   placeBallsAndGenerateNextBalls,
   restartGame,
+  saveHistorySnapshot,
   setIsAnimating,
   setShakingField,
   startGame,
+  undoMove,
 } from '../actions/gameBoard.actions';
 import {Field} from '../../types/field.type';
 import {Ball} from '../../types/ball.type';
 import {generateNewBalls, placeNewBallsOnBoards} from '../../helpers/generate.helper';
+import {seededRandom} from '../../helpers/seededRandom.helper';
 import {LanguagesEnum} from '../../types/languages.enum';
+
+type HistorySnapshot = {
+  board: GameBoard;
+  boardWithNextBalls: (Ball | undefined)[];
+  currentScore: number;
+};
 
 export type InitialState = {
   board: GameBoard;
@@ -34,6 +44,9 @@ export type InitialState = {
     isAnimating: boolean;
     shakingField: {i: number; j: number} | null;
   };
+  gameSeed: number;
+  moveNumber: number;
+  history: HistorySnapshot[];
 };
 
 export const initialState: InitialState = {
@@ -52,14 +65,30 @@ export const initialState: InitialState = {
     isAnimating: false,
     shakingField: null,
   },
+  gameSeed: 0,
+  moveNumber: 0,
+  history: [],
 };
 
 function initializeBoardWithBalls(state: InitialState): void {
+  state.gameSeed = Math.floor(Math.random() * 2 ** 32);
+  state.moveNumber = 0;
+  state.history = [];
   state.board = Array.from({length: 9}, (_, i) => Array.from({length: 9}, (_, j) => ({ball: null, i, j})));
-  state.boardWithNextBalls = generateNewBalls(3);
-  const fields = placeNewBallsOnBoards(state.board, generateNewBalls(3));
+  const rng = seededRandom(state.gameSeed);
+  state.boardWithNextBalls = generateNewBalls(3, rng);
+  const initialBalls = generateNewBalls(3, rng);
+  const fields = placeNewBallsOnBoards(state.board, initialBalls, rng);
   for (let i = 0; i < fields.length; i++) {
     state.board[fields[i].i][fields[i].j].ball = fields[i].ball;
+  }
+}
+
+function ensureNewFields(state: InitialState): void {
+  if (state.gameSeed === undefined) {
+    state.gameSeed = 0;
+    state.moveNumber = 0;
+    state.history = [];
   }
 }
 
@@ -102,12 +131,12 @@ export const gameBoardSlice: Slice<InitialState, NonNullable<unknown>, 'gameBoar
           state.currentSelectedField = null;
         }
       })
-      .addCase(placeBallsAndGenerateNextBalls, (state) => {
-        const fields = placeNewBallsOnBoards(state.board, state.boardWithNextBalls as Ball[]);
-        for (let i = 0; i < fields.length; i++) {
-          state.board[fields[i].i][fields[i].j].ball = fields[i].ball;
+      .addCase(placeBallsAndGenerateNextBalls, (state, {payload}) => {
+        const {placedFields, nextBalls} = payload;
+        for (const field of placedFields) {
+          state.board[field.i][field.j].ball = field.ball;
         }
-        state.boardWithNextBalls = generateNewBalls(3);
+        state.boardWithNextBalls = nextBalls;
       })
       .addCase(startGame, (state) => {
         initializeBoardWithBalls(state);
@@ -149,6 +178,31 @@ export const gameBoardSlice: Slice<InitialState, NonNullable<unknown>, 'gameBoar
       .addCase(setShakingField, (state, {payload}) => {
         if (!state.animation) state.animation = {isAnimating: false, shakingField: null};
         state.animation.shakingField = payload;
+      })
+      .addCase(saveHistorySnapshot, (state, {payload}) => {
+        ensureNewFields(state);
+        state.history.push(payload);
+        if (state.history.length > 2) state.history.shift();
+      })
+      .addCase(incrementMoveNumber, (state) => {
+        ensureNewFields(state);
+        state.moveNumber += 1;
+      })
+      .addCase(undoMove, (state) => {
+        ensureNewFields(state);
+        const snapshot = state.history.pop();
+        if (!snapshot) return;
+        state.board = snapshot.board as GameBoard;
+        // Deselect all balls — snapshot may have captured a ball in isSelected=true state
+        for (const row of state.board) {
+          for (const cell of row) {
+            if (cell.ball) cell.ball.isSelected = false;
+          }
+        }
+        state.boardWithNextBalls = snapshot.boardWithNextBalls as Ball[] | undefined[];
+        state.score.currentScore = snapshot.currentScore;
+        state.moveNumber = Math.max(0, state.moveNumber - 1);
+        state.currentSelectedField = null;
       });
   },
 });

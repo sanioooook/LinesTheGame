@@ -36,7 +36,7 @@ const GoogleSignInButton = () => {
       return (
         <>
           <button className="google-sign-in-button" onClick={() => handleOpenModal()}>
-            <img src={user.photoURL ?? avatar} alt="Google avatar" />
+            <img src={user.photoURL ?? avatar} alt="Google avatar" className="user-avatar" />
             {user.displayName}
             <img className={'icon'} src={svgSignOut} alt={''} />
           </button>

@@ -21,5 +21,9 @@
   "Close": "Зачинити",
   "Stay": "Залишитися",
   "Log out": "Вийти",
-  "Are you sure you want log out?": "Ви впевнені, що хочете вийти?"
+  "Are you sure you want log out?": "Ви впевнені, що хочете вийти?",
+  "undo": "Скасувати хід",
+  "leaderboard": "Рейтинг",
+  "player": "Гравець",
+  "leaderboardEmpty": "Поки немає результатів. Будь першим!"
 }

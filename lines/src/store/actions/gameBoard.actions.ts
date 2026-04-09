@@ -1,10 +1,13 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {Field} from '../../types/field.type';
+import {Ball} from '../../types/ball.type';
 import {RootState} from '../store';
 import {findPath, findAndRemoveLines} from '../../helpers/BFSAlgorithm.helper';
 import {GameBoard} from '../../types/gameBoard.type';
 import {LanguagesEnum} from '../../types/languages.enum';
 import {updateScore, getScore} from '../../firebase/functions/function-helper';
+import {generateNewBalls, placeNewBallsOnBoards} from '../../helpers/generate.helper';
+import {seededRandom} from '../../helpers/seededRandom.helper';
 
 const baseType = 'GAME_BOARD/';
 
@@ -22,9 +25,13 @@ export const startGame = createAction(`${baseType}START_GAME`);
 export const restartGame = createAction(`${baseType}RESTART_GAME`);
 export const applyBestScore = createAction<number>(`${baseType}APPLY_BEST_SCORE`);
 export const applyLatestScore = createAction<number>(`${baseType}APPLY_LATEST_SCORE`);
-export const placeBallsAndGenerateNextBalls = createAction(`${baseType}PLACE_BALLS_AND_GENERATE_NEXT_BALLS`);
+export const placeBallsAndGenerateNextBalls = createAction<{placedFields: Field[]; nextBalls: Ball[]}>(`${baseType}PLACE_BALLS_AND_GENERATE_NEXT_BALLS`);
 export const incrementScore = createAction<number>(`${baseType}INCREMENT_SCORE`);
 export const changeLanguage = createAction<LanguagesEnum>(`${baseType}CHANGE_LANGUAGE`);
+
+export const saveHistorySnapshot = createAction<{board: GameBoard; boardWithNextBalls: (Ball | undefined)[]; currentScore: number}>(`${baseType}SAVE_HISTORY_SNAPSHOT`);
+export const incrementMoveNumber = createAction(`${baseType}INCREMENT_MOVE_NUMBER`);
+export const undoMove = createAction(`${baseType}UNDO_MOVE`);
 
 export const moveBallAndCheckLines = createAsyncThunk<void, Field, {state: RootState}>(
   `${baseType}MOVE_BALL_AND_CHECK_LINES`,
@@ -48,6 +55,16 @@ export const moveBallAndCheckLines = createAsyncThunk<void, Field, {state: RootS
         return;
       }
 
+      // Save snapshot BEFORE the move (allows full undo back to this board state)
+      const stateSnapshot = getState().gameBoard;
+      dispatch(
+        saveHistorySnapshot({
+          board: stateSnapshot.board.map((row) => row.map((cell) => ({...cell, ball: cell.ball ? {...cell.ball} : null}))),
+          boardWithNextBalls: [...stateSnapshot.boardWithNextBalls] as (Ball | undefined)[],
+          currentScore: stateSnapshot.score.currentScore,
+        }),
+      );
+
       // Animate step by step along the path
       dispatch(setIsAnimating(true));
       let fromI = currentSelectedField.i;
@@ -68,6 +85,7 @@ export const moveBallAndCheckLines = createAsyncThunk<void, Field, {state: RootS
       }
 
       if (linesFound) {
+        dispatch(incrementMoveNumber());
         return;
       }
 
@@ -80,8 +98,16 @@ export const moveBallAndCheckLines = createAsyncThunk<void, Field, {state: RootS
         return;
       }
 
-      // Add new balls
-      dispatch(placeBallsAndGenerateNextBalls());
+      // Compute seeded placement for this move
+      const {gameSeed, moveNumber} = getState().gameBoard;
+      const rng = seededRandom(((gameSeed ^ (moveNumber * 1664525 + 1013904223)) >>> 0));
+      const currentBoard = getState().gameBoard.board;
+      const currentNextBalls = (getState().gameBoard.boardWithNextBalls as Ball[]).filter(Boolean);
+      const placedFields = placeNewBallsOnBoards(currentBoard, currentNextBalls, rng);
+      const nextBalls = generateNewBalls(3, rng);
+
+      dispatch(placeBallsAndGenerateNextBalls({placedFields, nextBalls}));
+      dispatch(incrementMoveNumber());
 
       // Check lines after placing new balls
       const result2 = findAndRemoveLines(getState().gameBoard.board);
@@ -105,7 +131,7 @@ export const trySendResultToGoogle = createAsyncThunk<void, void, {state: RootSt
       google: {user},
     } = getState();
     if (user !== null && score.currentScore > score.bestScore) {
-      updateScore(user.email as string, score.currentScore);
+      updateScore(user.email as string, score.currentScore, user.displayName, user.photoURL);
     }
   },
 );
@@ -118,7 +144,7 @@ export const trySendResultToGoogleAfterLogin = createAsyncThunk<void, void, {sta
       google: {user},
     } = getState();
     if (user !== null && score.bestScore) {
-      updateScore(user.email as string, score.bestScore);
+      updateScore(user.email as string, score.bestScore, user.displayName, user.photoURL);
     }
   },
 );

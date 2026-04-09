@@ -21,5 +21,9 @@
   "Close": "Закрыть",
   "Stay": "Остаться",
   "Log out": "Выйти",
-  "Are you sure you want log out?": "Вы уверены, что хотите выйти?"
+  "Are you sure you want log out?": "Вы уверены, что хотите выйти?",
+  "undo": "Отменить ход",
+  "leaderboard": "Рейтинг",
+  "player": "Игрок",
+  "leaderboardEmpty": "Пока нет результатов. Будь первым!"
 }

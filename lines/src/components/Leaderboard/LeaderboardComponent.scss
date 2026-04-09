@@ -1,0 +1,64 @@
+.leaderboard-loading,
+.leaderboard-empty {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1rem;
+  color: #666;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+
+  th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid #c2185b;
+    color: #c2185b;
+    font-weight: 600;
+  }
+}
+
+.leaderboard-row {
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &:last-child td {
+    border-bottom: none;
+  }
+
+  &--current {
+    font-weight: bold;
+    background-color: rgba(194, 24, 91, 0.08);
+  }
+}
+
+.leaderboard-rank {
+  width: 32px;
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.leaderboard-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.leaderboard-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.leaderboard-score {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #c2185b;
+  font-weight: 600;
+}
