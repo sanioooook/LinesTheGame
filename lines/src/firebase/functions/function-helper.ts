@@ -26,12 +26,27 @@ export function updateScore(playerID: string, newScore: number, displayName?: st
       return;
     }
     const document = playerSnapshot.docs[0];
+    const data = document.data();
     const updates: Record<string, unknown> = {};
-    if (document.data().score < newScore) {
-      updates.score = newScore;
+    if (data.score < newScore) updates.score = newScore;
+    // Always sync profile fields so leaderboard shows name/avatar even if score didn't improve
+    if (displayName !== undefined && data.displayName !== displayName) updates.displayName = displayName ?? null;
+    if (photoURL !== undefined && data.photoURL !== photoURL) updates.photoURL = photoURL ?? null;
+    if (Object.keys(updates).length > 0) {
+      updateDoc(document.ref, updates).catch(console.error);
     }
-    if (displayName !== undefined) updates.displayName = displayName ?? null;
-    if (photoURL !== undefined) updates.photoURL = photoURL ?? null;
+  });
+}
+
+// Called on login to ensure profile fields are up to date without changing score
+export function syncUserProfile(playerID: string, displayName: string | null, photoURL: string | null) {
+  getDocs(query(collection(firestore, 'scores'), where('user', '==', playerID))).then((playerSnapshot) => {
+    if (playerSnapshot.size !== 1) return; // no record yet — will be created on first score
+    const document = playerSnapshot.docs[0];
+    const data = document.data();
+    const updates: Record<string, unknown> = {};
+    if (data.displayName !== displayName) updates.displayName = displayName;
+    if (data.photoURL !== photoURL) updates.photoURL = photoURL;
     if (Object.keys(updates).length > 0) {
       updateDoc(document.ref, updates).catch(console.error);
     }

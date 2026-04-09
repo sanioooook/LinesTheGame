@@ -4,6 +4,7 @@ import {auth} from '../../firebase/firebase';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {successSignIn, successSignOut} from '../../store/actions/google.actions';
 import {applyBestScore, applyLatestScore, getScoreFromGoogle} from '../../store/actions/gameBoard.actions';
+import {syncUserProfile} from '../../firebase/functions/function-helper';
 
 /**
  * Subscribes to Firebase Auth state changes.
@@ -41,6 +42,11 @@ export function useAuthSync() {
           }),
         );
         dispatch(getScoreFromGoogle());
+        // Sync profile fields to Firestore so leaderboard shows
+        // up-to-date name/avatar even if the score hasn't improved
+        if (firebaseUser.email) {
+          syncUserProfile(firebaseUser.email, firebaseUser.displayName, firebaseUser.photoURL);
+        }
       }
     });
 
