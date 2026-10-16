@@ -25,5 +25,7 @@
   "undo": "Undo Move",
   "leaderboard": "Leaderboard",
   "player": "Player",
-  "leaderboardEmpty": "No scores yet. Be the first!"
+  "leaderboardEmpty": "No scores yet. Be the first!",
+  "leaderboardSignIn": "Sign in with Google to see the leaderboard.",
+  "leaderboardError": "Couldn't load the leaderboard. Try again later."
 }

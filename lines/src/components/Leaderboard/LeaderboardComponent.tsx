@@ -29,14 +29,25 @@ export const LeaderboardComponent: React.FC = () => {
   const dispatch = useAppDispatch();
   const entries = useAppSelector((state) => state.leaderboard.entries);
   const isLoading = useAppSelector((state) => state.leaderboard.isLoading);
+  const hasError = useAppSelector((state) => state.leaderboard.hasError);
   const currentUser = useAppSelector((state) => state.google.user);
+  const isSignedIn = currentUser !== null;
 
+  // Firestore rules allow reading scores only for signed-in users
   useEffect(() => {
-    dispatch(fetchLeaderboard());
-  }, [dispatch]);
+    if (isSignedIn) dispatch(fetchLeaderboard());
+  }, [dispatch, isSignedIn]);
+
+  if (!isSignedIn) {
+    return <div className="leaderboard-empty">{t('leaderboardSignIn')}</div>;
+  }
 
   if (isLoading) {
     return <div className="leaderboard-loading">...</div>;
+  }
+
+  if (hasError) {
+    return <div className="leaderboard-empty">{t('leaderboardError')}</div>;
   }
 
   if (entries.length === 0) {

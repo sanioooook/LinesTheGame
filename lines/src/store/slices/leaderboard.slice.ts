@@ -5,11 +5,13 @@ import {fetchLeaderboard} from '../actions/leaderboard.actions';
 type LeaderboardState = {
   entries: LeaderboardEntry[];
   isLoading: boolean;
+  hasError: boolean;
 };
 
 const initialState: LeaderboardState = {
   entries: [],
   isLoading: false,
+  hasError: false,
 };
 
 export const leaderboardSlice = createSlice({
@@ -20,6 +22,7 @@ export const leaderboardSlice = createSlice({
     builder
       .addCase(fetchLeaderboard.pending, (state) => {
         state.isLoading = true;
+        state.hasError = false;
       })
       .addCase(fetchLeaderboard.fulfilled, (state, {payload}) => {
         state.entries = payload;
@@ -27,6 +30,7 @@ export const leaderboardSlice = createSlice({
       })
       .addCase(fetchLeaderboard.rejected, (state) => {
         state.isLoading = false;
+        state.hasError = true;
       });
   },
 });
