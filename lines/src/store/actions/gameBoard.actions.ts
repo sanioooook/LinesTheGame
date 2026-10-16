@@ -82,6 +82,8 @@ export const moveBallAndCheckLines = createAsyncThunk<void, Field, {state: RootS
       dispatch(changeBoard(newBoard));
       if (scoreIncrement > 0) {
         dispatch(incrementScore(scoreIncrement));
+        // Save a new record right away instead of waiting for the game to end
+        dispatch(trySendResultToGoogle());
       }
 
       if (linesFound) {
@@ -114,6 +116,7 @@ export const moveBallAndCheckLines = createAsyncThunk<void, Field, {state: RootS
       dispatch(changeBoard(result2.newBoard));
       if (result2.scoreIncrement > 0) {
         dispatch(incrementScore(result2.scoreIncrement));
+        dispatch(trySendResultToGoogle());
       }
 
       if (emptyFields().length <= 0) {
