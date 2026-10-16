@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next';
 import svgSignOut from '../../svg/sign-out.svg';
 import avatar from '../../svg/avatar.svg';
 import Modal from '../../shared/components/Modal/Modal';
-import {preloadGoogleIdentity} from '../../firebase/googleIdentity';
+import {isGoogleIdentityEnabled, preloadGoogleIdentity} from '../../firebase/googleIdentity';
 
 const GoogleSignInButton = () => {
   const {t} = useTranslation();
@@ -15,7 +15,7 @@ const GoogleSignInButton = () => {
   const [isModalConfirmationOpen, setIsModalConfirmationOpen] = useState(false);
 
   useEffect(() => {
-    if (user === null && import.meta.env.MODE === 'production') preloadGoogleIdentity();
+    if (user === null && isGoogleIdentityEnabled) preloadGoogleIdentity();
   }, [user]);
 
   const handleOpenModal = () => {
