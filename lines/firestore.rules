@@ -1,8 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /scores/{score} {
-      allow read, write, update: if request.auth != null
+    // Each document holds one player's best score; `user` is the player's Google email.
+    match /scores/{scoreId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.user == request.auth.token.email;
+      // Players may update only their own record, and the best score never goes down.
+      allow update: if request.auth != null
+        && resource.data.user == request.auth.token.email
+        && request.resource.data.user == resource.data.user
+        && request.resource.data.score >= resource.data.score;
+      allow delete: if false;
     }
   }
 }
