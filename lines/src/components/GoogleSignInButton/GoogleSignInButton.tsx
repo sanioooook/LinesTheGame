@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './GoogleSignInButton.scss';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {signIn, signOut} from '../../store/actions/google.actions';
@@ -6,12 +6,18 @@ import {useTranslation} from 'react-i18next';
 import svgSignOut from '../../svg/sign-out.svg';
 import avatar from '../../svg/avatar.svg';
 import Modal from '../../shared/components/Modal/Modal';
+import {preloadGoogleIdentity} from '../../firebase/googleIdentity';
 
 const GoogleSignInButton = () => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.google.user);
   const [isModalConfirmationOpen, setIsModalConfirmationOpen] = useState(false);
+
+  useEffect(() => {
+    if (user === null && import.meta.env.MODE === 'production') preloadGoogleIdentity();
+  }, [user]);
+
   const handleOpenModal = () => {
     setIsModalConfirmationOpen(true);
   };

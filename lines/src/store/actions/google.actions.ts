@@ -1,8 +1,15 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {signInWithPopup, UserInfo, signOut as firebaseSignOut} from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithCredential,
+  signInWithPopup,
+  UserInfo,
+  signOut as firebaseSignOut,
+} from 'firebase/auth';
 import {FirebaseError} from 'firebase/app';
 import {RootState} from '../store';
 import {auth, provider} from '../../firebase/firebase';
+import {requestGoogleAccessToken} from '../../firebase/googleIdentity';
 import {applyBestScore, applyLatestScore, getScoreFromGoogle, trySendResultToGoogleAfterLogin} from './gameBoard.actions';
 
 const baseType = 'GOOGLE/';
@@ -14,7 +21,11 @@ export const errorSignOut = createAction<FirebaseError>(`${baseType}ERROR_SIGN_O
 
 export const signIn = createAsyncThunk<void, void, {state: RootState}>(`${baseType}SIGN_IN`, async (_, {dispatch}) => {
   try {
-    const result = await signInWithPopup(auth, provider);
+    // The auth emulator has no GIS counterpart, so local dev keeps the popup flow.
+    const result =
+      import.meta.env.MODE === 'production'
+        ? await signInWithCredential(auth, GoogleAuthProvider.credential(null, await requestGoogleAccessToken()))
+        : await signInWithPopup(auth, provider);
     dispatch(
       successSignIn({
         email: result.user.email,

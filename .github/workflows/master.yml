@@ -41,6 +41,8 @@ jobs:
         VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
         VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
         VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+        # OAuth web client of the Firebase project (public value, used by Google Identity Services)
+        VITE_GOOGLE_CLIENT_ID: 78296335880-6l2e5cgfmkd3rjf819lgn6hllur9qgsb.apps.googleusercontent.com
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4

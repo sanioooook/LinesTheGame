@@ -15,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const firestore = getFirestore(app);
 export const provider = new GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 export const auth = getAuth();
 if (import.meta.env.MODE !== 'production') {
   connectFirestoreEmulator(firestore, 'localhost', 8080);
